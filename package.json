@@ -1,0 +1,19 @@
+{
+  "name": "auto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "await-to-js": "^3.0.0",
+    "axios": "^1.3.4",
+    "coco-git": "^1.3.6",
+    "lodash": "^4.17.21",
+    "node-xlsx": "^0.21.0",
+    "ssh2": "^1.11.0"
+  }
+}
