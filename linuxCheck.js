@@ -55,10 +55,9 @@ module.exports = (config, conn) => {
                 return isRoot ? '正常' : '异常'
             })
 
-            // 日志目录占用的磁盘空间大小
-
+            // 日志目录占用的磁盘空间大小是否超出10g
             const logsPromise = exec('du -s /u01/server_logs/*').then(result => {
-                const max = 1024 * 1024 * 10
+                const max = 1024 * 1024 * 1024 * 10
                 const resultSplitValues = result.split('\n') || []
                 let res = ''
                 const isGt = resultSplitValues.some(value => {
@@ -66,23 +65,8 @@ module.exports = (config, conn) => {
                     res = value
                     return gt(parseInt(value), max)
                 })
-                return isGt ? `异常 ${res}` : '正常'
+                return isGt ? `异常 磁盘空间:${(parseInt(res) / max).toFixed(2)}G` : '正常'
             })
-
-
-            // 低权限用户密码有效期
-            // const userPromise = exec(`echo "${config.password}" | sudo -S chage -l ${config.username}`).then(result => {
-            //     const resultSplitValues = result.split('\n') || []
-            //     const account = {}
-            //     resultSplitValues.forEach(value => {
-            //         if (!value) return
-            //         const [k, v] = value.split('：')
-            //         account[trim(k)] = trim(v)
-            //     });
-            //     const nevers = [account['密码过期时间'], account['密码失效时间'], account['帐户过期时间']]
-            //     const isNoAllIsNever = nevers.some(never => !eq(never, '从不'))
-            //     return isNoAllIsNever ? '异常' : '正常'
-            // })
 
             // root密码有效期
             const rootPromise = exec(`echo "${config.password}" | sudo -S chage -l root`).then(result => {

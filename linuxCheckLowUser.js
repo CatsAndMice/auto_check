@@ -20,7 +20,7 @@ module.exports = (config, conn, user = []) => {
                 });
                 const nevers = [account['密码过期时间'], account['密码失效时间'], account['帐户过期时间']]
                 const isNoAllIsNever = nevers.some(never => !eq(never, '从不'))
-                return isNoAllIsNever ? '异常' + username : '正常' + username
+                return isNoAllIsNever ? '异常' : '正常'
             }
 
 
