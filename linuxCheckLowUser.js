@@ -15,11 +15,14 @@ module.exports = (config, conn, user = []) => {
                 const account = {}
                 resultSplitValues.forEach(value => {
                     if (!value) return
-                    const [k, v] = value.split('：')
+                    // 返回的结果存在英文或中文
+                    const [k, v] = value.includes(':') ? value.split(':') : value.split('：')
                     account[trim(k)] = trim(v)
                 });
-                const nevers = [account['密码过期时间'], account['密码失效时间'], account['帐户过期时间']]
-                const isNoAllIsNever = nevers.some(never => !eq(never, '从不'))
+                const nevers = [account['密码过期时间'] || account['Password expires'], account['密码失效时间'] || account['Password inactive'], account['帐户过期时间'] || account['Account expires']]
+                const isNoAllIsNever = nevers.some(never => {
+                    return !eq(never, '从不') && !eq(never, 'never')
+                })
                 return isNoAllIsNever ? '异常' : '正常'
             }
 
